@@ -1,19 +1,23 @@
+
 import streamlit as st
 import torch
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
+from transformers import MarianMTModel, MarianTokenizer
+from torch.utils.data import Dataset
 from gtts import gTTS
 import base64
-import io
 import os
-import zipfile
-import requests
+from pathlib import Path
+import io
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Page config
-st.set_page_config(page_title="Japanese to English Translator", layout="wide")
+st.set_page_config(page_title="JE Translator Bot", layout="wide")
 
 # シンプルな音声再生用のHTML関数
 def create_audio_player(audio_data):
     b64 = base64.b64encode(audio_data).decode()
+    
     md = f"""
         <audio autoplay controls style="width: 100%">
             <source src="data:audio/mp3;base64,{b64}" type="audio/mp3">
@@ -21,90 +25,100 @@ def create_audio_player(audio_data):
     """
     return st.markdown(md, unsafe_allow_html=True)
 
-# モデルのダウンロード関数
-def download_model():
-    model_url = "https://www.kaggle.com/code/stpeteishii/download-helsinki-nlp-model/output/model.zip"
-    zip_file_path = "model.zip"
-    
-    # ダウンロード
-    response = requests.get(model_url, stream=True)
-    with open(zip_file_path, "wb") as file:
-        for chunk in response.iter_content(chunk_size=8192):
-            file.write(chunk)
-
-    # 解凍
-    extracted_dir = "./model"
-    with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
-        zip_ref.extractall(extracted_dir)
-
-# モデルをロードする関数
-@st.cache_resource
+# Initialize model and tokenizer
+@st.cache(allow_output_mutation=True)
 def load_model():
-    if not os.path.exists("./model"):
-        download_model()  # 必要ならダウンロード
-    tokenizer = AutoTokenizer.from_pretrained("./model")
-    model = AutoModelForSeq2SeqLM.from_pretrained("./model")
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model.to(device)
-    return tokenizer, model, device
+    model_name = "Helsinki-NLP/opus-mt-ja-en"
+    model = MarianMTModel.from_pretrained(model_name).to(device)
+    tokenizer = MarianTokenizer.from_pretrained(model_name)
+    return model, tokenizer
 
 tokenizer, model, device = load_model()
 
-# 翻訳関数
-def translate_text(input_text):
-    inputs = tokenizer(input_text, return_tensors="pt", padding=True, truncation=True, max_length=64)
-    input_ids = inputs["input_ids"].to(device)
-    attention_mask = inputs["attention_mask"].to(device)
+# Chat handling functions
+def tokenize_data(inputs, max_length=64):
+    return tokenizer(
+        list(inputs), 
+        max_length=max_length, 
+        padding=True, 
+        truncation=True, 
+        return_tensors="pt"
+    )
 
+class CustomDataset(Dataset):
+    def __init__(self, encodings):
+        self.encodings = encodings
+    
+    def __len__(self):
+        return len(self.encodings["input_ids"])
+    
+    def __getitem__(self, idx):
+        return {
+            "input_ids": self.encodings["input_ids"][idx],
+            "attention_mask": self.encodings["attention_mask"][idx],
+        }
+
+def generate_response(input_text):
+    inputs_enc = tokenize_data([input_text])
+    input_ids = inputs_enc["input_ids"].to(device)
+    attention_mask = inputs_enc["attention_mask"].to(device)
+    
     model.eval()
     with torch.no_grad():
-        output = model.generate(input_ids=input_ids, attention_mask=attention_mask, max_length=128)
-        return tokenizer.decode(output[0], skip_special_tokens=True)
+        outputs = model.generate(
+            input_ids=input_ids,
+            attention_mask=attention_mask,
+            repetition_penalty=1.2,
+            max_length=128
+        )
+        return tokenizer.decode(outputs[0], skip_special_tokens=True)
 
-# 音声生成
-def generate_speech(text):
+# 音声を生成する関数
+def generate_speech(text, lang='en'):
     try:
-        tts = gTTS(text=text, lang='en')
+        tts = gTTS(text=text, lang=lang)
         audio_buffer = io.BytesIO()
         tts.write_to_fp(audio_buffer)
         audio_buffer.seek(0)
         return audio_buffer.read()
     except Exception as e:
-        st.error(f"音声生成エラー: {str(e)}")
+        st.error(f"Error: {str(e)}")
         return None
 
-# Session state 初期化
+# Initialize session state
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# UI
-st.title("Japanese to English Translator")
+# Chat UI
+st.title("JE Translator Bot")
 
 # サイドバー設定
 with st.sidebar:
-    enable_tts = st.checkbox("英語の音声を再生", value=True)
+    enable_tts = st.checkbox("Enable Text-to-Speech", value=True)
+    lang = st.selectbox("Language", ['en'], index=0)
 
-# チャット履歴を表示
+# Display chat messages
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# 翻訳入力
-if prompt := st.chat_input("翻訳したい日本語を入力してください"):
-    # ユーザー入力を表示
+# Chat input
+if prompt := st.chat_input("What's on your mind?"):
+    # Add user message
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
     
-    # 翻訳結果を生成
+    # Generate and display assistant response
     with st.chat_message("assistant"):
-        translation = translate_text(prompt)
-        st.markdown(translation)
-        st.session_state.messages.append({"role": "assistant", "content": translation})
+        response = generate_response(prompt)
+        st.markdown(response)
+        st.session_state.messages.append({"role": "assistant", "content": response})
         
-        # 音声再生
+        # 音声読み上げが有効な場合、応答を音声に変換して再生
         if enable_tts:
-            with st.spinner("音声生成中..."):
-                audio_data = generate_speech(translation)
+            with st.spinner("Generating..."):
+                audio_data = generate_speech(response, lang)
                 if audio_data:
                     create_audio_player(audio_data)
+
