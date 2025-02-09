@@ -4,6 +4,9 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 from gtts import gTTS
 import base64
 import io
+import os
+import zipfile
+import gdown
 
 # Page config
 st.set_page_config(page_title="Japanese to English Translator", layout="wide")
@@ -17,15 +20,6 @@ def create_audio_player(audio_data):
         </audio>
     """
     return st.markdown(md, unsafe_allow_html=True)
-
-
-
-import os
-import zipfile
-import gdown
-import streamlit as st
-import torch
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
 # Google Drive からダウンロード
 def download_and_extract_model():
