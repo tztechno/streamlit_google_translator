@@ -25,8 +25,8 @@ def create_audio_player(audio_data):
 # Initialize model and tokenizer
 @st.cache_resource
 def load_model():
-    tokenizer = AutoTokenizer.from_pretrained("facebook/blenderbot-400M-distill")
-    model = AutoModelForSeq2SeqLM.from_pretrained("facebook/blenderbot-400M-distill")
+    tokenizer = AutoTokenizer.from_pretrained("Helsinki-NLP/opus-mt-ja-en")
+    model = AutoModelForSeq2SeqLM.from_pretrained("Helsinki-NLP/opus-mt-ja-en")
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
     return tokenizer, model, device
