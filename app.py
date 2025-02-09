@@ -17,7 +17,6 @@ def main():
         'it': 'Italian',
         'ja': 'Japanese',
         'ko': 'Korean',
-        'zh-cn': 'Chinese (Simplified)',
         'ru': 'Russian',
         'ar': 'Arabic'
     }
