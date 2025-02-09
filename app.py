@@ -1,20 +1,16 @@
 import streamlit as st
 import torch
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
-from torch.utils.data import Dataset
 from gtts import gTTS
 import base64
-import os
-from pathlib import Path
 import io
 
 # Page config
-st.set_page_config(page_title="Blender Chat Bot", layout="wide")
+st.set_page_config(page_title="Japanese to English Translator", layout="wide")
 
 # シンプルな音声再生用のHTML関数
 def create_audio_player(audio_data):
     b64 = base64.b64encode(audio_data).decode()
-    
     md = f"""
         <audio autoplay controls style="width: 100%">
             <source src="data:audio/mp3;base64,{b64}" type="audio/mp3">
@@ -22,7 +18,7 @@ def create_audio_player(audio_data):
     """
     return st.markdown(md, unsafe_allow_html=True)
 
-# Initialize model and tokenizer
+# モデルとトークナイザーのロード
 @st.cache_resource
 def load_model():
     tokenizer = AutoTokenizer.from_pretrained("Helsinki-NLP/opus-mt-ja-en")
@@ -33,89 +29,61 @@ def load_model():
 
 tokenizer, model, device = load_model()
 
-# Chat handling functions
-def tokenize_data(inputs, max_length=64):
-    return tokenizer(
-        list(inputs), 
-        max_length=max_length, 
-        padding=True, 
-        truncation=True, 
-        return_tensors="pt"
-    )
+# 翻訳関数
+def translate_text(input_text):
+    inputs = tokenizer(input_text, return_tensors="pt", padding=True, truncation=True, max_length=64)
+    input_ids = inputs["input_ids"].to(device)
+    attention_mask = inputs["attention_mask"].to(device)
 
-class CustomDataset(Dataset):
-    def __init__(self, encodings):
-        self.encodings = encodings
-    
-    def __len__(self):
-        return len(self.encodings["input_ids"])
-    
-    def __getitem__(self, idx):
-        return {
-            "input_ids": self.encodings["input_ids"][idx],
-            "attention_mask": self.encodings["attention_mask"][idx],
-        }
-
-def generate_response(input_text):
-    inputs_enc = tokenize_data([input_text])
-    input_ids = inputs_enc["input_ids"].to(device)
-    attention_mask = inputs_enc["attention_mask"].to(device)
-    
     model.eval()
     with torch.no_grad():
-        outputs = model.generate(
-            input_ids=input_ids,
-            attention_mask=attention_mask,
-            repetition_penalty=1.2,
-            max_length=128
-        )
-        return tokenizer.decode(outputs[0], skip_special_tokens=True)
+        output = model.generate(input_ids=input_ids, attention_mask=attention_mask, max_length=128)
+        return tokenizer.decode(output[0], skip_special_tokens=True)
 
-# 音声を生成する関数
-def generate_speech(text, lang='en'):
+# 音声生成
+def generate_speech(text):
     try:
-        tts = gTTS(text=text, lang=lang)
+        tts = gTTS(text=text, lang='en')
         audio_buffer = io.BytesIO()
         tts.write_to_fp(audio_buffer)
         audio_buffer.seek(0)
         return audio_buffer.read()
     except Exception as e:
-        st.error(f"Error: {str(e)}")
+        st.error(f"音声生成エラー: {str(e)}")
         return None
 
-# Initialize session state
+# Session state 初期化
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Chat UI
-st.title("Blender Chat Bot")
+# UI
+st.title("Japanese to English Translator")
 
 # サイドバー設定
 with st.sidebar:
-    enable_tts = st.checkbox("Enable Text-to-Speech", value=True)
-    lang = st.selectbox("Language", ['en'], index=0)
+    enable_tts = st.checkbox("英語の音声を再生", value=True)
 
-# Display chat messages
+# チャット履歴を表示
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# Chat input
-if prompt := st.chat_input("What's on your mind?"):
-    # Add user message
+# 翻訳入力
+if prompt := st.chat_input("翻訳したい日本語を入力してください"):
+    # ユーザー入力を表示
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
     
-    # Generate and display assistant response
+    # 翻訳結果を生成
     with st.chat_message("assistant"):
-        response = generate_response(prompt)
-        st.markdown(response)
-        st.session_state.messages.append({"role": "assistant", "content": response})
+        translation = translate_text(prompt)
+        st.markdown(translation)
+        st.session_state.messages.append({"role": "assistant", "content": translation})
         
-        # 音声読み上げが有効な場合、応答を音声に変換して再生
+        # 音声再生
         if enable_tts:
-            with st.spinner("Generating..."):
-                audio_data = generate_speech(response, lang)
+            with st.spinner("音声生成中..."):
+                audio_data = generate_speech(translation)
                 if audio_data:
                     create_audio_player(audio_data)
