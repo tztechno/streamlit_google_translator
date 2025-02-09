@@ -1,7 +1,7 @@
 # streamlit_je_translator
 
 ---
-
+```
 import os
 import zipfile
 import gdown
@@ -36,5 +36,6 @@ def load_model():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
     return tokenizer, model, device
-    
+
+``` 
 ---
