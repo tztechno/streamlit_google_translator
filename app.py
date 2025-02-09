@@ -5,6 +5,8 @@ from gtts import gTTS
 import base64
 import io
 import os
+import zipfile
+import requests
 
 # Page config
 st.set_page_config(page_title="Japanese to English Translator", layout="wide")
@@ -19,45 +21,29 @@ def create_audio_player(audio_data):
     """
     return st.markdown(md, unsafe_allow_html=True)
 
-dir0="https://www.kaggle.com/code/stpeteishii/download-helsinki-nlp-model/output/model/"
-# Kaggle `output` のファイル URL
-MODEL_FILES = [
-    dir0+"config.json",
-    dir0+"generation_config.json",
-    dir0+"model.safetensors",
-    dir0+"source.spm",
-    dir0+"special_tokens_map.json",
-    dir0+"target.spm",
-    dir0+"tokenizer_config.json",
-    dir0+"vocab.json",
-]
-
-MODEL_DIR = "./model"
-
-# モデルをダウンロードする関数
+# モデルのダウンロード関数
 def download_model():
-    os.makedirs(MODEL_DIR, exist_ok=True)
+    model_url = "https://www.kaggle.com/code/stpeteishii/download-helsinki-nlp-model/output/model.zip"
+    zip_file_path = "model.zip"
     
-    for file_url in MODEL_FILES:
-        filename = os.path.join(MODEL_DIR, os.path.basename(file_url))
-        
-        if not os.path.exists(filename):  # 既に存在するならスキップ
-            st.info(f"Downloading {filename}...")
-            response = requests.get(file_url, stream=True)
-            
-            if response.status_code == 200:
-                with open(filename, "wb") as f:
-                    for chunk in response.iter_content(chunk_size=1024):
-                        f.write(chunk)
-            else:
-                st.error(f"Failed to download {filename}")
+    # ダウンロード
+    response = requests.get(model_url, stream=True)
+    with open(zip_file_path, "wb") as file:
+        for chunk in response.iter_content(chunk_size=8192):
+            file.write(chunk)
+
+    # 解凍
+    extracted_dir = "./model"
+    with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
+        zip_ref.extractall(extracted_dir)
 
 # モデルをロードする関数
 @st.cache_resource
 def load_model():
-    download_model()  # 必要ならダウンロード
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
-    model = AutoModelForSeq2SeqLM.from_pretrained(MODEL_DIR)
+    if not os.path.exists("./model"):
+        download_model()  # 必要ならダウンロード
+    tokenizer = AutoTokenizer.from_pretrained("./model")
+    model = AutoModelForSeq2SeqLM.from_pretrained("./model")
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
     return tokenizer, model, device
