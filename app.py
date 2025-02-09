@@ -6,7 +6,7 @@ import os
 from gtts import gTTS
 
 def main():
-    st.title("Multi Translation Text-to-Speech")
+    st.title("Multi Translation")
     
     # Get list of available languages
     LANGUAGES = {
