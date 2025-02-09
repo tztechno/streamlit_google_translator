@@ -12,7 +12,7 @@ import io
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Page config
-st.set_page_config(page_title="JE Translator Bot", layout="wide")
+st.set_page_config(page_title="En2De Translator Bot", layout="wide")
 
 # シンプルな音声再生用のHTML関数
 def create_audio_player(audio_data):
@@ -28,8 +28,8 @@ def create_audio_player(audio_data):
 # Initialize model and tokenizer
 @st.cache_resource
 def load_model():
-    tokenizer = MarianTokenizer.from_pretrained(model_name)
-    model = MarianMTModel.from_pretrained(model_name)
+    tokenizer = MarianTokenizer.from_pretrained('Helsinki-NLP/opus-mt-en-de')
+    model = MarianMTModel.from_pretrained('Helsinki-NLP/opus-mt-en-de')
     device = "cuda" if torch.cuda.is_available() else "cpu"
     return tokenizer, model, device
 
@@ -90,12 +90,12 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
 
 # Chat UI
-st.title("JE Translator Bot")
+st.title("En2De Translator Bot")
 
 # サイドバー設定
 with st.sidebar:
     enable_tts = st.checkbox("Enable Text-to-Speech", value=True)
-    lang = st.selectbox("Language", ['en'], index=0)
+    lang = st.selectbox("Language", ['de'], index=0)
 
 # Display chat messages
 for message in st.session_state.messages:
