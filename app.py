@@ -1,15 +1,12 @@
+
 import streamlit as st
-from googletrans import Translator
+from deep_translator import GoogleTranslator
 import tempfile
 import os
 from gtts import gTTS
-import asyncio
 
 def main():
-    st.title("Translation Text-to-Speech")
-    
-    # Initialize translator
-    translator = Translator()
+    st.title("Translation and Text-to-Speech App")
     
     # Get list of available languages
     LANGUAGES = {
@@ -39,8 +36,8 @@ def main():
         if input_text:
             try:
                 # Translate text
-                translation = translator.translate(input_text, dest=target_lang)  # 非同期処理を同期的に実行
-                translated_text = translation.text
+                translator = GoogleTranslator(source='auto', target=target_lang)
+                translated_text = translator.translate(input_text)
                 
                 # Display translated text
                 st.write("### Translated Text:")
@@ -68,3 +65,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
