@@ -21,30 +21,45 @@ def create_audio_player(audio_data):
     """
     return st.markdown(md, unsafe_allow_html=True)
 
-# Google Drive からダウンロード
-def download_and_extract_model():
-    model_dir = "./model"
-    zip_path = "./model.zip"
-    file_id = "1ZvD0-kH_Yt9GuMmf0KRcsNLJHOHsQEAF"  # ← ここを変更（Google Drive のファイル ID）
+dir0="https://www.kaggle.com/code/stpeteishii/download-helsinki-nlp-model/output/model/"
+# Kaggle `output` のファイル URL
+MODEL_FILES = [
+    dir0+"config.json",
+    dir0+"generation_config.json",
+    dir0+"model.safetensors",
+    dir0+"source.spm",
+    dir0+"special_tokens_map.json",
+    dir0+"target.spm",
+    dir0+"tokenizer_config.json",
+    dir0+"vocab.json",
+]
 
-    if not os.path.exists(model_dir):  # 既にモデルがあるならスキップ
-        st.info("Downloading model... (This may take a while)")
-        url = f"https://drive.google.com/uc?id={file_id}"
-        gdown.download(url, zip_path, quiet=False)
+MODEL_DIR = "./model"
 
-        st.info("Extracting model...")
-        with zipfile.ZipFile(zip_path, "r") as zip_ref:
-            zip_ref.extractall("./")
+# モデルをダウンロードする関数
+def download_model():
+    os.makedirs(MODEL_DIR, exist_ok=True)
+    
+    for file_url in MODEL_FILES:
+        filename = os.path.join(MODEL_DIR, os.path.basename(file_url))
+        
+        if not os.path.exists(filename):  # 既に存在するならスキップ
+            st.info(f"Downloading {filename}...")
+            response = requests.get(file_url, stream=True)
+            
+            if response.status_code == 200:
+                with open(filename, "wb") as f:
+                    for chunk in response.iter_content(chunk_size=1024):
+                        f.write(chunk)
+            else:
+                st.error(f"Failed to download {filename}")
 
-        os.remove(zip_path)  # ZIP 削除
-
-# モデルのロード
+# モデルをロードする関数
 @st.cache_resource
 def load_model():
-    download_and_extract_model()  # 必要ならダウンロード
-    model_path = "./model"
-    tokenizer = AutoTokenizer.from_pretrained(model_path)
-    model = AutoModelForSeq2SeqLM.from_pretrained(model_path)
+    download_model()  # 必要ならダウンロード
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_DIR)
+    model = AutoModelForSeq2SeqLM.from_pretrained(MODEL_DIR)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.to(device)
     return tokenizer, model, device
