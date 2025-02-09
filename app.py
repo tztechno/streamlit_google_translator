@@ -5,8 +5,6 @@ from gtts import gTTS
 import base64
 import io
 import os
-import zipfile
-import gdown
 
 # Page config
 st.set_page_config(page_title="Japanese to English Translator", layout="wide")
