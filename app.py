@@ -26,12 +26,12 @@ def create_audio_player(audio_data):
     return st.markdown(md, unsafe_allow_html=True)
 
 # Initialize model and tokenizer
-@st.cache(allow_output_mutation=True)
+@st.cache_resource
 def load_model():
-    model_name = "Helsinki-NLP/opus-mt-ja-en"
-    model = MarianMTModel.from_pretrained(model_name).to(device)
     tokenizer = MarianTokenizer.from_pretrained(model_name)
-    return model, tokenizer
+    model = MarianMTModel.from_pretrained(model_name)
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    return tokenizer, model, device
 
 tokenizer, model, device = load_model()
 
