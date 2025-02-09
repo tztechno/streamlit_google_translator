@@ -1,5 +1,11 @@
 # streamlit_je_translator
 
+```
+deploy failure
+
+model is too heavy to use as streamlit app
+```
+
 ---
 ```
 import os
