@@ -1,4 +1,4 @@
-# streamlit_google_translator
+# streamlit_multi_translation
 
 ```
 
