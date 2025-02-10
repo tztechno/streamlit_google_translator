@@ -16,8 +16,10 @@ def main():
         'de': 'German',
         'it': 'Italian',
         'ja': 'Japanese',
-        'ko': 'Korean',
+        'pt': 'Portuguese'
         'ru': 'Russian',
+        'ko': 'Korean',        
+        'zh': 'Chinese',
         'ar': 'Arabic'
     }
     
