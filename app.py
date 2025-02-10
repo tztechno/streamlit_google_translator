@@ -16,11 +16,11 @@ def main():
         'de': 'German',
         'it': 'Italian',
         'ja': 'Japanese',
-        'pt': 'Portuguese'
+        'pt': 'Portuguese',
         'ru': 'Russian',
         'ko': 'Korean',        
         'zh': 'Chinese',
-        'ar': 'Arabic'
+        'ar': 'Arabic',
     }
     
     # Create input text area
