@@ -19,7 +19,7 @@ def main():
         'pt': 'Portuguese',
         'ru': 'Russian',
         'ko': 'Korean',        
-        'zh': 'Chinese',
+        'zh-CN':'Chinese (simplified)',
         'ar': 'Arabic',
     }
     
