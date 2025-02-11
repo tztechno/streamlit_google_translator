@@ -24,7 +24,7 @@ def main():
     }
     
     # Create input text area
-    input_text = st.text_area("Enter text to translate:", value="Hello World")
+    input_text = st.text_area("Enter text to translate:", value="Hello")
     
     # Create language selection dropdown
     target_lang = st.selectbox(
@@ -41,7 +41,7 @@ def main():
                 translated_text = translator.translate(input_text)
                 
                 # Display translated text
-                st.write("### Translated Text:")
+                # st.write("### Translated Text:")
                 st.write(translated_text)
                 
                 # Generate audio file
@@ -53,7 +53,7 @@ def main():
                     tts.save(temp_file)
                 
                 # Display audio player
-                st.write("### Audio:")
+                # st.write("### Audio:")
                 st.audio(temp_file)
                 
                 # Clean up temporary file
