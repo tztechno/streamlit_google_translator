@@ -4,11 +4,24 @@ from gtts import gTTS
 import base64
 import io
 
-def create_audio_player(audio_data):
-    """リアルタイムに音声を再生するHTMLプレイヤーを作成"""
+# --- 事前にクリックを要求（スマホ対応） ---
+if "user_clicked" not in st.session_state:
+    st.session_state.user_clicked = False
+
+if not st.session_state.user_clicked:
+    if st.button("🔊 Enable Audio Autoplay"):
+        st.session_state.user_clicked = True
+    st.stop()  # ボタンが押されるまで処理を止める
+
+def create_audio_player(audio_data, autoplay=True):
+    """音声を再生するHTMLプレイヤー"""
     b64 = base64.b64encode(audio_data).decode()
+    
+    # autoplay を有効化（ユーザーがクリック済みなら動作可能）
+    auto_attr = "autoplay" if autoplay else ""
+    
     md = f"""
-        <audio autoplay controls style="width: 100%">
+        <audio {auto_attr} controls style="width: 100%">
             <source src="data:audio/mp3;base64,{b64}" type="audio/mp3">
         </audio>
     """
@@ -45,7 +58,7 @@ def main():
     
     input_text = st.text_area("Enter text to translate:", value="Hello")
     target_lang = st.selectbox("Select target language:", options=list(LANGUAGES.keys()), format_func=lambda x: LANGUAGES[x])
-    
+
     if st.button("Translate and Generate Audio"):
         if input_text:
             try:
@@ -53,10 +66,11 @@ def main():
                 translated_text = translator.translate(input_text)
                 st.write(translated_text)
                 
-                # 音声生成とリアルタイム再生
+                # 音声生成
                 audio_data = generate_speech(translated_text, target_lang)
+                
                 if audio_data:
-                    create_audio_player(audio_data)
+                    create_audio_player(audio_data, autoplay=True)  # 自動再生（ユーザー操作後なら可能）
 
             except Exception as e:
                 st.error(f"An error occurred: {str(e)}")
