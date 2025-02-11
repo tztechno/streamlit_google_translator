@@ -27,7 +27,7 @@ def generate_speech(text, lang):
         return None
 
 def main():
-    st.title("Multi Translation")
+    st.title("LangHub")
     
     LANGUAGES = {
         'en': 'English',
