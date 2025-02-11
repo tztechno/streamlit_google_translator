@@ -5,138 +5,141 @@ the supported languages: {'afrikaans': 'af', 'albanian': 'sq', 'amharic': 'am', 
 
 ```
 
-アフリカーンス語: af
-アルバニア語: sq
-アムハラ語: am
-アラビア語: ar
-アルメニア語: hy
-アッサム語: as
-アイマラ語: ay
-アゼルバイジャン語: az
-バンバラ語: bm
-バスク語: eu
-ベラルーシ語: be
-ベンガル語: bn
-ボージプリー語: bho
-ボスニア語: bs
-ブルガリア語: bg
-カタルーニャ語: ca
-セブアノ語: ceb
-チチェワ語: ny
-中国語（簡体字）: zh-CN
-中国語（繁体字）: zh-TW
-コルシカ語: co
-クロアチア語: hr
-チェコ語: cs
-デンマーク語: da
-ディベヒ語: dv
-ドグリ語: doi
-オランダ語: nl
-英語: en
-エスペラント語: eo
-エストニア語: et
-エウェ語: ee
-フィリピン語: tl
-フィンランド語: fi
-フランス語: fr
-フリジア語: fy
-ガリシア語: gl
-グルジア語: ka
-ドイツ語: de
-ギリシャ語: el
-グアラニー語: gn
-グジャラート語: gu
-ハイチ・クレオール語: ht
-ハウサ語: ha
-ハワイ語: haw
-ヘブライ語: iw
-ヒンディー語: hi
-ムンゴ語: hmn
-ハンガリー語: hu
-アイスランド語: is
-イグボ語: ig
-イロカノ語: ilo
-インドネシア語: id
-アイルランド語: ga
-イタリア語: it
-日本語: ja
-ジャワ語: jw
-カンナダ語: kn
-カザフ語: kk
-クメール語: km
-キニヤルワンダ語: rw
-コンクニ語: gom
-韓国語: ko
-クリオ語: kri
-クルド語（クルマンジ）: ku
-クルド語（ソラニ）: ckb
-キルギス語: ky
-ラオ語: lo
-ラテン語: la
-ラトビア語: lv
-リンガラ語: ln
-リトアニア語: lt
-ルガンダ語: lg
-ルクセンブルク語: lb
-マケドニア語: mk
-マイティリ語: mai
-マダガスカル語: mg
-マレー語: ms
-マラヤーラム語: ml
-マルタ語: mt
-マオリ語: mi
-マラーティー語: mr
-メイテイロン語（マニプール語）: mni-Mtei
-ミゾ語: lus
-モンゴル語: mn
-ミャンマー語: my
-ネパール語: ne
-ノルウェー語: no
-オディア語（オリヤ語）: or
-オロモ語: om
-パシュトー語: ps
-ペルシャ語: fa
-ポーランド語: pl
-ポルトガル語: pt
-パンジャブ語: pa
-ケチュア語: qu
-ルーマニア語: ro
-ロシア語: ru
-サモア語: sm
-サンスクリット語: sa
-スコットランド・ゲール語: gd
-セペディ語: nso
-セルビア語: sr
-セソト語: st
-ショナ語: sn
-シンディ語: sd
-シンハラ語: si
-スロバキア語: sk
-スロベニア語: sl
-ソマリ語: so
-スペイン語: es
-スンダ語: su
-スワヒリ語: sw
-スウェーデン語: sv
-タジク語: tg
-タミル語: ta
-タタール語: tt
-テルグ語: te
-タイ語: th
-ティグリニャ語: ti
-ツォンガ語: ts
-トルコ語: tr
-トルクメン語: tk
-ツイ語: ak
-ウクライナ語: uk
-ウルドゥー語: ur
-ウイグル語: ug
-ウズベク語: uz
-ベトナム語: vi
-ウェールズ語: cy
-ズールー語: zu
-ヨルバ語: yo
-イディッシュ語: yi
-ザンビア語: xh
+設定可能な言語はこちら
+
+* アフリカーンス語: Afrikaans (af)
+* アルバニア語: Albanian (sq)
+* アムハラ語: Amharic (am)
+* アラビア語: Arabic (ar)
+* アルメニア語: Armenian (hy)
+* アッサム語: Assamese (as)
+* アイマラ語: Aymara (ay)
+* アゼルバイジャン語: Azerbaijani (az)
+* バンバラ語: Bambara (bm)
+* バスク語: Basque (eu)
+* ベラルーシ語: Belarusian (be)
+* ベンガル語: Bengali (bn)
+* ボージプリー語: Bhojpuri (bho)
+* ボスニア語: Bosnian (bs)
+* ブルガリア語: Bulgarian (bg)
+* カタルーニャ語: Catalan (ca)
+* セブアノ語: Cebuano (ceb)
+* チチェワ語: Chichewa (ny)
+* 中国語（簡体字）: Chinese (Simplified) (zh-CN)
+* 中国語（繁体字）: Chinese (Traditional) (zh-TW)
+* コルシカ語: Corsican (co)
+* クロアチア語: Croatian (hr)
+* チェコ語: Czech (cs)
+* デンマーク語: Danish (da)
+* ディベヒ語: Dhivehi (dv)
+* ドグリ語: Dogri (doi)
+* オランダ語: Dutch (nl)
+* 英語: English (en)
+* エスペラント語: Esperanto (eo)
+* エストニア語: Estonian (et)
+* エウェ語: Ewe (ee)
+* フィリピン語: Filipino (tl)
+* フィンランド語: Finnish (fi)
+* フランス語: French (fr)
+* フリジア語: Frisian (fy)
+* ガリシア語: Galician (gl)
+* グルジア語: Georgian (ka)
+* ドイツ語: German (de)
+* ギリシャ語: Greek (el)
+* グアラニー語: Guarani (gn)
+* グジャラート語: Gujarati (gu)
+* ハイチ・クレオール語: Haitian Creole (ht)
+* ハウサ語: Hausa (ha)
+* ハワイ語: Hawaiian (haw)
+* ヘブライ語: Hebrew (iw)
+* ヒンディー語: Hindi (hi)
+* ムンゴ語: Hmong (hmn)
+* ハンガリー語: Hungarian (hu)
+* アイスランド語: Icelandic (is)
+* イグボ語: Igbo (ig)
+* イロカノ語: Ilocano (ilo)
+* インドネシア語: Indonesian (id)
+* アイルランド語: Irish (ga)
+* イタリア語: Italian (it)
+* 日本語: Japanese (ja)
+* ジャワ語: Javanese (jw)
+* カンナダ語: Kannada (kn)
+* カザフ語: Kazakh (kk)
+* クメール語: Khmer (km)
+* キニヤルワンダ語: Kinyarwanda (rw)
+* コンクニ語: Konkani (gom)
+* 韓国語: Korean (ko)
+* クリオ語: Krio (kri)
+* クルド語（クルマンジ）: Kurdish (Kurmanji) (ku)
+* クルド語（ソラニ）: Kurdish (Sorani) (ckb)
+* キルギス語: Kyrgyz (ky)
+* ラオ語: Lao (lo)
+* ラテン語: Latin (la)
+* ラトビア語: Latvian (lv)
+* リンガラ語: Lingala (ln)
+* リトアニア語: Lithuanian (lt)
+* ルガンダ語: Luganda (lg)
+* ルクセンブルク語: Luxembourgish (lb)
+* マケドニア語: Macedonian (mk)
+* マイティリ語: Maithili (mai)
+* マダガスカル語: Malagasy (mg)
+* マレー語: Malay (ms)
+* マラヤーラム語: Malayalam (ml)
+* マルタ語: Maltese (mt)
+* マオリ語: Maori (mi)
+* マラーティー語: Marathi (mr)
+* メイテイロン語（マニプール語）: Meiteilon (Manipuri) (mni-Mtei)
+* ミゾ語: Mizo (lus)
+* モンゴル語: Mongolian (mn)
+* ミャンマー語: Myanmar (my)
+* ネパール語: Nepali (ne)
+* ノルウェー語: Norwegian (no)
+* オディア語（オリヤ語）: Odia (Oriya) (or)
+* オロモ語: Oromo (om)
+* パシュトー語: Pashto (ps)
+* ペルシャ語: Persian (fa)
+* ポーランド語: Polish (pl)
+* ポルトガル語: Portuguese (pt)
+* パンジャブ語: Punjabi (pa)
+* ケチュア語: Quechua (qu)
+* ルーマニア語: Romanian (ro)
+* ロシア語: Russian (ru)
+* サモア語: Samoan (sm)
+* サンスクリット語: Sanskrit (sa)
+* スコットランド・ゲール語: Scots Gaelic (gd)
+* セペディ語: Sepedi (nso)
+* セルビア語: Serbian (sr)
+* セソト語: Sesotho (st)
+* ショナ語: Shona (sn)
+* シンディ語: Sindhi (sd)
+* シンハラ語: Sinhala (si)
+* スロバキア語: Slovak (sk)
+* スロベニア語: Slovenian (sl)
+* ソマリ語: Somali (so)
+* スペイン語: Spanish (es)
+* スンダ語: Sundanese (su)
+* スワヒリ語: Swahili (sw)
+* スウェーデン語: Swedish (sv)
+* タジク語: Tajik (tg)
+* タミル語: Tamil (ta)
+* タタール語: Tatar (tt)
+* テルグ語: Telugu (te)
+* タイ語: Thai (th)
+* ティグリニャ語: Tigrinya (ti)
+* ツォンガ語: Tsonga (ts)
+* トルコ語: Turkish (tr)
+* トルクメン語: Turkmen (tk)
+* ツイ語: Twi (ak)
+* ウクライナ語: Ukrainian (uk)
+* ウルドゥー語: Urdu (ur)
+* ウイグル語: Uyghur (ug)
+* ウズベク語: Uzbek (uz)
+* ベトナム語: Vietnamese (vi)
+* ウェールズ語: Welsh (cy)
+* ズールー語: Zulu (zu)
+* ヨルバ語: Yoruba (yo)
+* イディッシュ語: Yiddish (yi)
+* ザンビア語: Xhosa (xh)
+
 
 ```
